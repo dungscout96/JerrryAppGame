@@ -6,8 +6,33 @@
     android:layout_height="match_parent"
     tools:context="edu.gettysburg.jerry_s_game.MainActivity">
 
-    <edu.gettysburg.jerry_s_game.BalloonView
-        android:id="@+id/balloonView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <edu.gettysburg.jerry_s_game.BalloonView
+            android:id="@+id/balloonView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/purple"
+            android:id="@+id/balloon1"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/red"
+            android:id="@+id/balloon2"
+            />
+
+
+
+
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -14,6 +14,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 
 /**
  * Created by parker on 11/28/17.
@@ -28,6 +30,9 @@ public class BalloonView extends View {
     static final Paint whitePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     static final Paint bluePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
+
+    ImageView imgView;
+    //imgView = (ImageView) findViewbyId(R.id.blue)
 
     static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -88,5 +93,11 @@ public class BalloonView extends View {
     }
 
 
-
 }
+
+
+
+
+
+
+
