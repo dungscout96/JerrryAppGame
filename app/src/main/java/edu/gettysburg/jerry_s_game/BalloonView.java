@@ -31,8 +31,8 @@ public class BalloonView extends View {
 
     static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    public final Drawable[] balloons = new Drawable[8];
-    public final Bitmap[] bitmaps = new Bitmap[8];
+    public final Drawable[] balloons = new Drawable[9];
+    public final Bitmap[] bitmaps = new Bitmap[9];
 
     Rect srcRect;
     Rect destRect;
@@ -41,7 +41,7 @@ public class BalloonView extends View {
     //black, purple, blue, green, yellow, orange, red
     public static final Integer[] imageResIds = new Integer[]{0, R.drawable.black,
             R.drawable.purple,R.drawable.blue,R.drawable.green, R.drawable.yellow,
-            R.drawable.orange,R.drawable.red};
+            R.drawable.orange,R.drawable.red, R.drawable.death};
 
     Resources res = null;
 
@@ -78,9 +78,11 @@ public class BalloonView extends View {
         int width = getWidth();
         int height = getHeight();
 
-        canvas.drawBitmap(bitmaps[2],srcRect, destRect,paint);
 
         canvas.drawRect(0,0,width,height, bluePaint);
+
+
+        canvas.drawBitmap(bitmaps[2],srcRect, destRect,paint);
 
 
     }
