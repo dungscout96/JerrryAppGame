@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         }, 0, 20);
     }
 
-
         public void changePos(){
             balloon1y -= 10;
             if (balloon1.getY() + balloon1.getHeight() < 0){
