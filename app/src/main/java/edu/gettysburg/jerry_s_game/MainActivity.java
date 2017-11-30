@@ -1,6 +1,7 @@
 package edu.gettysburg.jerry_s_game;
 
 import android.graphics.Point;
+import android.media.AudioRecord;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private int height;
 
     private ArrayList<ImageView> balloons = new ArrayList<ImageView>();
+    private ArrayList<ImageView> balloonSelector = new ArrayList<ImageView>();
+
 
     //private float balloon1x;
     //private float balloon1y;
@@ -36,9 +40,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageView balloon1 = (ImageView) findViewById(R.id.balloonRed);
+        ImageView balloonRed = (ImageView) findViewById(R.id.balloonRed);
+        ImageView balloonOrange = (ImageView) findViewById(R.id.balloonOrange);
+        ImageView balloonBlue = (ImageView) findViewById(R.id.balloonBlue);
+        ImageView balloonPurple = (ImageView) findViewById(R.id.balloonPurple);
+        ImageView balloonBlack = (ImageView) findViewById(R.id.balloonBlack);
+        ImageView balloonDeath = (ImageView) findViewById(R.id.balloonDeath);
+        ImageView balloonGreen = (ImageView) findViewById(R.id.balloonGreen);
+        ImageView balloonYellow = (ImageView) findViewById(R.id.balloonYellow);
 
-        balloons.add(balloon1);
+        balloonSelector = new ArrayList<ImageView>();
+
+        balloonSelector.add(balloonDeath);
+        balloonSelector.add(balloonBlack);
+        balloonSelector.add(balloonPurple);
+        balloonSelector.add(balloonBlue);
+        balloonSelector.add(balloonGreen);
+        balloonSelector.add(balloonYellow);
+        balloonSelector.add(balloonOrange);
+        balloonSelector.add(balloonRed);
 
         // Get Screen Size
         WindowManager wm = getWindowManager();
@@ -48,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         width = size.x;
         height = size.y;
 
-        balloon1.setX(-80.0f);
-        balloon1.setY(-80.0f);
+        balloonRed.setX(-80.0f);
+        balloonRed.setY(-80.0f);
 
         timer.schedule(new TimerTask() {
             public void run() {
@@ -76,25 +96,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
         public void addBalloons(){
-
-
-
-
-
-
+            Random rand = new Random();
+            int n = rand.nextInt(balloonSelector.size());
+            ImageView balloon = balloonSelector.get(n);
+            balloons.add(balloon);
         }
-
-
 
         public void changePos(){
 
             for(int i = 0; i < balloons.size();i++){
 
                 ImageView balloon = balloons.get(i);
-
-                float balloony = balloon.getY();
-                balloony -= 10;
-                balloon.setY(balloony);
+                balloon.setY(balloon.getY()-10);
 
                 float balloon1x = balloon.getX();
 

@@ -24,15 +24,10 @@ import android.widget.ImageView;
 public class BalloonView extends View {
 
     //fields
-
     boolean isGameOver = false;
 
     static final Paint whitePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     static final Paint bluePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-
-    ImageView imgView;
-    //imgView = (ImageView) findViewbyId(R.id.blue)
 
     static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
