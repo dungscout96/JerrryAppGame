@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,13 +21,12 @@ public class MainActivity extends AppCompatActivity {
     private int width;
     private int height;
 
-    private ImageView balloon1;
-    private ImageView balloon2;
+    private ArrayList<ImageView> balloons = new ArrayList<ImageView>();
 
-    private float balloon1x;
-    private float balloon1y;
-    private float balloon2x;
-    private float balloon2y;
+    //private float balloon1x;
+    //private float balloon1y;
+    //private float balloon2x;
+    //private float balloon2y;
 
     private Handler handler = new Handler();
     private Timer timer = new Timer();
@@ -36,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        balloon1 = (ImageView) findViewById(R.id.balloon1);
-        balloon2 = (ImageView) findViewById(R.id.balloon2);
+        ImageView balloon1 = (ImageView) findViewById(R.id.balloonRed);
+
+        balloons.add(balloon1);
 
         // Get Screen Size
         WindowManager wm = getWindowManager();
@@ -50,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
         balloon1.setX(-80.0f);
         balloon1.setY(-80.0f);
 
-        balloon2.setX(-50.0f);
-        balloon2.setY(-80.0f);
-
         timer.schedule(new TimerTask() {
             public void run() {
                 handler.post(new Runnable() {
@@ -63,17 +61,47 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }, 0, 20);
+
+        timer.schedule(new TimerTask() {
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        addBalloons();
+                    }
+                });
+            }
+        }, 0, 1000);
+
     }
+
+        public void addBalloons(){
+
+
+
+
+
+
+        }
+
+
 
         public void changePos(){
-            balloon1y -= 10;
-            if (balloon1.getY() + balloon1.getHeight() < 0){
-                balloon1x = (float)Math.floor(Math.random() * (width - balloon1.getWidth()));
-                balloon1y = height + 100.0f;
-            }
-            balloon1.setX(balloon1x);
-            balloon1.setY(balloon1y);
-    }
 
+            for(int i = 0; i < balloons.size();i++){
+
+                ImageView balloon = balloons.get(i);
+
+                float balloony = balloon.getY();
+                balloony -= 10;
+                balloon.setY(balloony);
+
+                float balloon1x = balloon.getX();
+
+                if (balloon.getY() + balloon.getHeight() < 0){
+                    balloons.remove(balloon);
+                }
+            }
+    }
 }
 

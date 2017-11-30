@@ -20,19 +20,54 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/purple"
-            android:id="@+id/balloon1"
+            android:src="@drawable/black"
+            android:id="@+id/balloonBlack"
             />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/red"
-            android:id="@+id/balloon2"
+            android:src="@drawable/purple"
+            android:id="@+id/balloonPurple"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/blue"
+            android:id="@+id/balloonBlue"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/green"
+            android:id="@+id/balloonGreen"
             />
 
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/yellow"
+            android:id="@+id/balloonYellow"
+            />
 
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/orange"
+            android:id="@+id/balloonOrange"
+            />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/red"
+            android:id="@+id/balloonRed"
+            />
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
