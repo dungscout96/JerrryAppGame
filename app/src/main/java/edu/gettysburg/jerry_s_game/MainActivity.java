@@ -6,7 +6,9 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -93,6 +95,30 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 0, 1000);
 
+        makeBalloonsClickable();
+
+    }
+
+
+    public void makeBalloonsClickable() {
+
+
+        for (ImageView balloon : balloons) {
+
+            balloon.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    Log.i("touched", "balloon touched");
+                    //     balloon.setVisibility(View.INVISIBLE);
+                    balloonTouched(view);
+                    return false;
+                }
+            });
+        }
+    }
+
+    public void balloonTouched(View view) {
+        view.setVisibility(View.INVISIBLE);
     }
 
         public void addBalloons(){
