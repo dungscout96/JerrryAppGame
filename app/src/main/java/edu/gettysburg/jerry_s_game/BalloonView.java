@@ -52,6 +52,7 @@ public class BalloonView extends View {
     }
 
 
+
     public BalloonView(Context context, AttributeSet attrs) {
         super(context, attrs);
         res = context.getResources();
