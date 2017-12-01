@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //count down timer
         final TextView mTextField = this.findViewById(R.id.textView);
         new CountDownTimer(30000, 1000) {
 
