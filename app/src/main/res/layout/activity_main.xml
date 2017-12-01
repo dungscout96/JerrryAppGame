@@ -9,74 +9,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="453dp"
-            android:orientation="horizontal">
-
-            <edu.gettysburg.jerry_s_game.BalloonView
-                android:id="@+id/balloonView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/balloonBlack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/black" />
-
-            <ImageView
-                android:id="@+id/balloonPurple"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/purple" />
-
-            <ImageView
-                android:id="@+id/balloonBlue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/blue" />
-
-            <ImageView
-                android:id="@+id/balloonGreen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/green" />
-
-
-            <ImageView
-                android:id="@+id/balloonYellow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/yellow" />
-
-
-            <ImageView
-                android:id="@+id/balloonOrange"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/orange" />
-
-
-            <ImageView
-                android:id="@+id/balloonRed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/red" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView"
+        <edu.gettysburg.jerry_s_game.BalloonView
+            android:id="@+id/balloonView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="default"
-            android:textSize="30sp"
-            tools:text="default" />
-    </LinearLayout>
+            android:layout_weight="1" />
 
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
