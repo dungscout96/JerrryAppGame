@@ -50,6 +50,9 @@ public class BalloonView extends View {
     public final Drawable[] balloonsDrawable = new Drawable[9];
     public final Bitmap[] bitmaps = new Bitmap[9];
 
+    int balloonHeight;
+    int balloonWidth;
+
     Rect srcRect;
     Rect destRect;
 
@@ -74,13 +77,20 @@ public class BalloonView extends View {
     private void init(){
         isGameOver = false;
 
+
+
         for (int i = 1; i < imageResIds.length; i++){
             balloonsDrawable[i] = res.getDrawable(imageResIds[i]);
             bitmaps[i] = BitmapFactory.decodeResource(res, imageResIds[i]);
         }
 
+
+         balloonHeight = (bitmaps[1].getHeight() - 1) / 3;
+        balloonWidth = (bitmaps[1].getWidth() - 1) / 3;
+
+
         srcRect = new Rect(0, 0, bitmaps[1].getWidth() - 1, bitmaps[1].getHeight() - 1);
-        destRect = new Rect(0, 0, bitmaps[1].getWidth() - 1, bitmaps[1].getHeight() - 1);
+        destRect = new Rect(0, 0, balloonWidth, balloonHeight);
     }
 
     @Override
@@ -92,14 +102,22 @@ public class BalloonView extends View {
 
         canvas.drawRect(0,0,width,height,whitePaint);
 
+        //make n random balloons with random rectangles
+        for (int i = 0; i < 20; i++) {
+            Random rand = new Random();
+            int a = rand.nextInt(8) + 1;
+            int left = rand.nextInt(width - balloonWidth);
+            int top = rand.nextInt(height - balloonHeight);
 
-        Rect dRect = new Rect(20, height,bitmaps[1].getWidth() - 1, bitmaps[1].getHeight() - 1);
+            Rect dRect = new Rect(left, top, left + balloonWidth, top + balloonHeight);
 
-        canvas.drawBitmap(bitmaps[5], srcRect, dRect, paint);
+            canvas.drawBitmap(bitmaps[a], srcRect, dRect, paint);
+        }
+
+
+
         canvas.drawBitmap(bitmaps[2],srcRect, destRect,paint);
 
-        canvas.drawBitmap(bitmaps[3],srcRect, destRect,paint);
-        canvas.drawBitmap(bitmaps[4],srcRect, destRect,paint);
 
 
         /*timer.schedule(new TimerTask() {
