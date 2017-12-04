@@ -35,7 +35,7 @@ public class BalloonView extends View {
 
     private int width;
     private int height;
-
+    Canvas canvas1;
     private HashMap<Rect, Integer> balloons = new HashMap<Rect, Integer>();
     private ArrayList<ImageView> balloonSelector = new ArrayList<ImageView>();
 
@@ -96,76 +96,76 @@ public class BalloonView extends View {
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-
+        canvas1 = canvas;
         int width = getWidth();
         int height = getHeight();
 
         canvas.drawRect(0,0,width,height,whitePaint);
 
+        Rect[] destRects;
+
         //make n random balloons with random rectangles
+        Random rand = new Random();
+
         for (int i = 0; i < 20; i++) {
-            Random rand = new Random();
             int a = rand.nextInt(8) + 1;
             int left = rand.nextInt(width - balloonWidth);
             int top = rand.nextInt(height - balloonHeight);
 
             Rect dRect = new Rect(left, top, left + balloonWidth, top + balloonHeight);
-
-            canvas.drawBitmap(bitmaps[a], srcRect, dRect, paint);
+            canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
         }
 
+     //   canvas1.drawBitmap(bitmaps[2], 0, 0,   null );
 
 
-        canvas.drawBitmap(bitmaps[2],srcRect, destRect,paint);
+        Log.i("hi", "hiiii");
 
-
-
-        /*timer.schedule(new TimerTask() {
+        timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        changePos();
+                        invalidate();
+                        //changePos(canvas1);
+                      //  canvas.drawBitmap(bitmaps[2], 0, 0, null);
                     }
                 });
             }
-        }, 0, 20);
+        }, 1000, Integer.MAX_VALUE);
 
-        timer.schedule(new TimerTask() {
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        addBalloons();
-                    }
-                });
-            }
-        }, 0, 1000);*/
+//        timer.schedule(new TimerTask() {
+//            public void run() {
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        addBalloons();
+//                    }
+//                });
+//            }
+//        }, 0, 1000);
 
         // makeBalloonsClickable();
     }
 
-    /*public void addBalloons(){
-        Random rand = new Random();
-        int n = rand.nextInt(balloonSelector.size());
-        ImageView balloon = balloonSelector.get(n);
-        balloons.add(balloon);
-    }*/
+    public void changePos(Canvas canvas){
 
-    /*public void changePos(){
 
-        for(int i = 0; i < balloons.size();i++){
 
-            ImageView balloon = balloons.get(i);
-            balloon.setY(balloon.getY()-10);
+        Log.i("hello", "top");
+        canvas.drawBitmap(bitmaps[2], 0, 0, null);
 
-            float balloon1x = balloon.getX();
+    //    Random rand = new Random();
+    //    int a = rand.nextInt(8) + 1;
+        //int left = rand.nextInt(width - balloonWidth);
+        //int top = rand.nextInt(height - balloonHeight);
 
-            if (balloon.getY() + balloon.getHeight() < 0){
-                balloons.remove(balloon);
-            }
-        }
-    }*/
+        // Rect dRect = new Rect(left, top, left + balloonWidth, top + balloonHeight);
+     //   canvas1.drawBitmap(bitmaps[a], srcRect, destRect, paint);
+        //canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
+
+
+    }
 
     /*public void makeBalloonsClickable() {
 
