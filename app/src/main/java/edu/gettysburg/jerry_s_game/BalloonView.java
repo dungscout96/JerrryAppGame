@@ -32,7 +32,7 @@ import java.util.TimerTask;
  */
 
 public class BalloonView extends View {
-
+    private int nBalloons = 20;
     private int width;
     private int height;
     Canvas canvas1;
@@ -49,6 +49,8 @@ public class BalloonView extends View {
 
     public final Drawable[] balloonsDrawable = new Drawable[9];
     public final Bitmap[] bitmaps = new Bitmap[9];
+    Rect[] destRects = new Rect[nBalloons];
+    Integer[] destBalloons = new Integer[nBalloons];
 
     int balloonHeight;
     int balloonWidth;
@@ -77,7 +79,12 @@ public class BalloonView extends View {
     private void init(){
         isGameOver = false;
 
-
+        int width = getWidth(); // does not work, need to fix
+        int height = getHeight(); // TODO
+width = 1000;
+height = 1000;
+        Log.i("width", "" + width);
+        Log.i("height", "" + height);
 
         for (int i = 1; i < imageResIds.length; i++){
             balloonsDrawable[i] = res.getDrawable(imageResIds[i]);
@@ -87,6 +94,22 @@ public class BalloonView extends View {
 
          balloonHeight = (bitmaps[1].getHeight() - 1) / 3;
         balloonWidth = (bitmaps[1].getWidth() - 1) / 3;
+
+        //make n random balloons with random rectangles
+        Random rand = new Random();
+
+
+        for (int i = 0; i < nBalloons; i++) {
+            int a = rand.nextInt(8) + 1;
+            int left = rand.nextInt(width - balloonWidth);
+            int top = rand.nextInt(height - balloonHeight);
+
+            Rect dRect = new Rect(left, top, left + balloonWidth, top + balloonHeight);
+            destRects[i] = dRect;
+            destBalloons[i] = a; //so we can pair the color with the balloon
+
+           // canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
+        }
 
 
         srcRect = new Rect(0, 0, bitmaps[1].getWidth() - 1, bitmaps[1].getHeight() - 1);
@@ -102,18 +125,8 @@ public class BalloonView extends View {
 
         canvas.drawRect(0,0,width,height,whitePaint);
 
-        Rect[] destRects;
-
-        //make n random balloons with random rectangles
-        Random rand = new Random();
-
-        for (int i = 0; i < 20; i++) {
-            int a = rand.nextInt(8) + 1;
-            int left = rand.nextInt(width - balloonWidth);
-            int top = rand.nextInt(height - balloonHeight);
-
-            Rect dRect = new Rect(left, top, left + balloonWidth, top + balloonHeight);
-            canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
+        for (int i = 0; i < nBalloons; i++) {
+            canvas1.drawBitmap(bitmaps[destBalloons[i]], srcRect, destRects[i], paint);
         }
 
      //   canvas1.drawBitmap(bitmaps[2], 0, 0,   null );
@@ -126,13 +139,14 @@ public class BalloonView extends View {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        changePos();
                         invalidate();
                         //changePos(canvas1);
                       //  canvas.drawBitmap(bitmaps[2], 0, 0, null);
                     }
                 });
             }
-        }, 1000, Integer.MAX_VALUE);
+        }, 25, Integer.MAX_VALUE);
 
 //        timer.schedule(new TimerTask() {
 //            public void run() {
@@ -148,13 +162,15 @@ public class BalloonView extends View {
         // makeBalloonsClickable();
     }
 
-    public void changePos(Canvas canvas){
+    public void changePos(){
 
 
 
-        Log.i("hello", "top");
-        canvas.drawBitmap(bitmaps[2], 0, 0, null);
-
+        Log.i("hello", "moving");
+        for (int i = 0; i < nBalloons; i++){
+            Rect rect = destRects[i];
+            destRects[i] = new Rect(rect.left, rect.top - 5, rect.right, rect.bottom - 5);
+        }
     //    Random rand = new Random();
     //    int a = rand.nextInt(8) + 1;
         //int left = rand.nextInt(width - balloonWidth);
