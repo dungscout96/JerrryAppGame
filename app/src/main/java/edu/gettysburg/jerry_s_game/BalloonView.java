@@ -79,36 +79,33 @@ public class BalloonView extends View {
         init();
     }
 
-    @Override
-    protected void onSizeChanged(int width, int height, int oldw, int oldh) {
-        this.width = width;
-        this.height = height;
-        super.onSizeChanged(width, height, oldw, oldh);
-    }
-
     private void init(){
+
         isGameOver = false;
 
-        //width = getWidth(); // does not work, need to fix
-        //height = getHeight(); // TODO/width = 1000;
+        // TODO get actual width and height
         width = 1080;
         height = 1584;
+        // we need to somehow be able to fix this: init() gets called before onDraw.
+        // we can't get the width or height of the screen unless we are on that method
+        // thus, we can't randomize where our balloons start before drawing them (absurd?)
+        // unless we assume some width and height.
+        // Maybe to fix it, we could not initialize the balloons and create an if statement in the
+        // onDraw method such that when we update the width and the height (at the beginning 0)
+        // we create new balloons.
+        // So far it generates the balloons at the given width and height
 
-        //Log.i("width", "" + width);
-        //Log.i("height", "" + height);
 
         for (int i = 1; i < imageResIds.length; i++){
             balloonsDrawable[i] = res.getDrawable(imageResIds[i]);
             bitmaps[i] = BitmapFactory.decodeResource(res, imageResIds[i]);
         }
 
-
         balloonHeight = (bitmaps[1].getHeight() - 1) / 3;
         balloonWidth = (bitmaps[1].getWidth() - 1) / 3;
 
         //make n random balloons with random rectangles
         Random rand = new Random();
-
 
         for (int i = 0; i < nBalloons; i++) {
             int a = rand.nextInt(8) + 1;
@@ -119,10 +116,7 @@ public class BalloonView extends View {
             destRects[i] = dRect;
             destBalloons[i] = a; //so we can pair the color with the balloon
 
-           // canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
         }
-
-
         srcRect = new Rect(0, 0, bitmaps[1].getWidth() - 1, bitmaps[1].getHeight() - 1);
         destRect = new Rect(0, 0, balloonWidth, balloonHeight);
     }
@@ -131,9 +125,14 @@ public class BalloonView extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
 
-        //Log.i("in onDraw!!", "in onDraw!!!" );
-
         canvas1 = canvas;
+
+//        if(getWidth() != width || getHeight() != height){
+//            width = getWidth();
+//            height = getHeight();
+//          Maybe we don't need it
+//          Maybe fix here the problem with the width and the height / rotation of the screen?
+//        }
         width = getWidth();
         height = getHeight();
 
@@ -142,8 +141,6 @@ public class BalloonView extends View {
         for (int i = 0; i < nBalloons; i++) {
             canvas1.drawBitmap(bitmaps[destBalloons[i]], srcRect, destRects[i], paint);
         }
-
-
 
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -157,28 +154,18 @@ public class BalloonView extends View {
             }
         }, 20, Integer.MAX_VALUE);
 
-//        timer.schedule(new TimerTask() {
-//            public void run() {
-//                handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        addBalloons();
-//                    }
-//                });
-//            }
-//        }, 0, 1000);
-
         // makeBalloonsClickable();
     }
 
     public void changePos(){
-        //Log.i("changePos", " ");
         for (int i = 0; i < nBalloons; i++){
             Rect rect = destRects[i];
 
             if (rect.bottom < 0){
                 destRects[i] = new Rect(rect.left, rect.top + 2*height, rect.right, rect.bottom + 2*height);
                 // if they are on the top, we move them to the bottom. Below where the screen is
+
+                // TODO update visibility here to make them visible again
             }
             else {
                 destRects[i] = new Rect(rect.left, rect.top - speed, rect.right, rect.bottom - speed);
@@ -186,17 +173,19 @@ public class BalloonView extends View {
             }
         }
 
-    //    Random rand = new Random();
-    //    int a = rand.nextInt(8) + 1;
-        //int left = rand.nextInt(width - balloonWidth);
-        //int top = rand.nextInt(height - balloonHeight);
-
-        // Rect dRect = new Rect(left, top, left + balloonWidth, top + balloonHeight);
-     //   canvas1.drawBitmap(bitmaps[a], srcRect, destRect, paint);
-        //canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
-
 
     }
+
+    // TODO make balloons clickable
+    /* make them invisible if clickable and make them visible again in changePos()
+        also, set a counter for the score
+
+     */
+
+    /*
+     // TODO set a timer
+    We have to be able to lose somehow, right? And if we lose, save the High Score
+     */
 
     /*public void makeBalloonsClickable() {
 
