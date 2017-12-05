@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeSet;
+import java.util.TreeMap;
+import java.util.HashMap;
 
 /**
  * Created by parker on 11/28/17.
@@ -46,15 +49,19 @@ public class BalloonView extends View {
     private Timer timer = new Timer();
 
     boolean isGameOver = false;
+    int totalScore = 0;
 
     static final Paint whitePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public final Drawable[] balloonsDrawable = new Drawable[9];
     public final Bitmap[] bitmaps = new Bitmap[9];
+    public Bitmap bitmapPopped = null;
     Rect[] destRects = new Rect[nBalloons];
     Integer[] destBalloons = new Integer[nBalloons];
-
+    TreeMap<Integer, Integer> balloonTouched = new TreeMap<Integer, Integer>();
+    TreeSet<Integer> balloonDisappeared = new TreeSet<Integer>();
+    HashMap<Integer, Integer> balloonPoints = new HashMap<Integer, Integer>();
     int balloonHeight;
     int balloonWidth;
 
@@ -65,6 +72,7 @@ public class BalloonView extends View {
     public static final Integer[] imageResIds = new Integer[]{0, R.drawable.black,
             R.drawable.purple,R.drawable.blue,R.drawable.green, R.drawable.yellow,
             R.drawable.orange,R.drawable.red, R.drawable.death};
+    public static final int[] points = {0, 11, 9, 7, 5, 3, 2, 1, -1};
 
     Resources res = null;
 
@@ -101,14 +109,14 @@ public class BalloonView extends View {
             balloonsDrawable[i] = res.getDrawable(imageResIds[i]);
             bitmaps[i] = BitmapFactory.decodeResource(res, imageResIds[i]);
         }
-
+        int resIDPopped = R.drawable.popped;
+        bitmapPopped = BitmapFactory.decodeResource(res, resIDPopped);
 
         balloonHeight = (bitmaps[1].getHeight() - 1) / 3;
         balloonWidth = (bitmaps[1].getWidth() - 1) / 3;
 
         //make n random balloons with random rectangles
         Random rand = new Random();
-
 
         for (int i = 0; i < nBalloons; i++) {
             int a = rand.nextInt(8) + 1;
@@ -119,10 +127,9 @@ public class BalloonView extends View {
             destRects[i] = dRect;
             destBalloons[i] = a; //so we can pair the color with the balloon
 
+            balloonPoints.put(i,points[a]);
            // canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
         }
-
-
         srcRect = new Rect(0, 0, bitmaps[1].getWidth() - 1, bitmaps[1].getHeight() - 1);
         destRect = new Rect(0, 0, balloonWidth, balloonHeight);
     }
@@ -138,9 +145,15 @@ public class BalloonView extends View {
         height = getHeight();
 
         canvas.drawRect(0,0,width,height,whitePaint);
-
         for (int i = 0; i < nBalloons; i++) {
-            canvas1.drawBitmap(bitmaps[destBalloons[i]], srcRect, destRects[i], paint);
+            if (balloonTouched.containsKey(i) || balloonDisappeared.contains(i)) {
+                if (balloonTouched.containsKey(i)) {
+                    canvas1.drawBitmap(bitmapPopped, srcRect, destRects[i], paint);
+                }
+            }
+            else {
+                canvas1.drawBitmap(bitmaps[destBalloons[i]], srcRect, destRects[i], paint);
+            }
         }
 
 
@@ -178,11 +191,28 @@ public class BalloonView extends View {
 
             if (rect.bottom < 0){
                 destRects[i] = new Rect(rect.left, rect.top + 2*height, rect.right, rect.bottom + 2*height);
+                // reset balloon bitmap to make them appear again
+                if (balloonTouched.containsKey(i)) {
+                    balloonTouched.remove(i);
+                }
+                if (balloonDisappeared.contains(i)) {
+                    balloonDisappeared.remove(i);
+                }
                 // if they are on the top, we move them to the bottom. Below where the screen is
             }
             else {
-                destRects[i] = new Rect(rect.left, rect.top - speed, rect.right, rect.bottom - speed);
-                // move them to the top
+                destRects[i] = new Rect(rect.left, rect.top - speed, rect.right, rect.bottom - speed); // move them to the top
+                // for animation: update balloons' bitmaps
+                if (balloonTouched.containsKey(i)) {
+                    if (balloonTouched.get(i) > 10) {
+                        balloonTouched.remove(i);
+                        balloonDisappeared.add(i);
+                    }
+                    else {
+                        int times = balloonTouched.get(i);
+                        balloonTouched.put(i, times + 1);
+                    }
+                }
             }
         }
 
@@ -196,6 +226,26 @@ public class BalloonView extends View {
         //canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
 
 
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!isGameOver && event.getActionMasked() == MotionEvent.ACTION_DOWN || event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+            int touchX = (int)event.getX();
+            int touchY = (int)event.getY();
+            for (int i = 0; i < nBalloons; ++i) {
+                Rect rect = destRects[i];
+                int balloonIndex = destBalloons[i];
+                if (rect.contains(touchX, touchY)) {
+                    Log.i("onTouchEvent","points " + balloonPoints.get(i));
+                    balloonTouched.put(i,0);
+                    totalScore += balloonPoints.get(i);
+                    Log.i("onTouchEvent","totalScore " + totalScore);
+                }
+            }
+        }
+        return true;
     }
 
     /*public void makeBalloonsClickable() {
