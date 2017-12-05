@@ -13,10 +13,12 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -32,7 +34,8 @@ import java.util.TimerTask;
  */
 
 public class BalloonView extends View {
-    private int nBalloons = 20;
+    private int nBalloons = 40;
+    private int speed = 7;
     private int width;
     private int height;
     Canvas canvas1;
@@ -76,15 +79,23 @@ public class BalloonView extends View {
         init();
     }
 
+    @Override
+    protected void onSizeChanged(int width, int height, int oldw, int oldh) {
+        this.width = width;
+        this.height = height;
+        super.onSizeChanged(width, height, oldw, oldh);
+    }
+
     private void init(){
         isGameOver = false;
 
-        int width = getWidth(); // does not work, need to fix
-        int height = getHeight(); // TODO
-width = 1000;
-height = 1000;
-        Log.i("width", "" + width);
-        Log.i("height", "" + height);
+        //width = getWidth(); // does not work, need to fix
+        //height = getHeight(); // TODO/width = 1000;
+        width = 1080;
+        height = 1584;
+
+        //Log.i("width", "" + width);
+        //Log.i("height", "" + height);
 
         for (int i = 1; i < imageResIds.length; i++){
             balloonsDrawable[i] = res.getDrawable(imageResIds[i]);
@@ -92,7 +103,7 @@ height = 1000;
         }
 
 
-         balloonHeight = (bitmaps[1].getHeight() - 1) / 3;
+        balloonHeight = (bitmaps[1].getHeight() - 1) / 3;
         balloonWidth = (bitmaps[1].getWidth() - 1) / 3;
 
         //make n random balloons with random rectangles
@@ -102,7 +113,7 @@ height = 1000;
         for (int i = 0; i < nBalloons; i++) {
             int a = rand.nextInt(8) + 1;
             int left = rand.nextInt(width - balloonWidth);
-            int top = rand.nextInt(height - balloonHeight);
+            int top = rand.nextInt(2 * height);
 
             Rect dRect = new Rect(left, top, left + balloonWidth, top + balloonHeight);
             destRects[i] = dRect;
@@ -119,9 +130,12 @@ height = 1000;
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
+
+        //Log.i("in onDraw!!", "in onDraw!!!" );
+
         canvas1 = canvas;
-        int width = getWidth();
-        int height = getHeight();
+        width = getWidth();
+        height = getHeight();
 
         canvas.drawRect(0,0,width,height,whitePaint);
 
@@ -129,10 +143,7 @@ height = 1000;
             canvas1.drawBitmap(bitmaps[destBalloons[i]], srcRect, destRects[i], paint);
         }
 
-     //   canvas1.drawBitmap(bitmaps[2], 0, 0,   null );
 
-
-        Log.i("hi", "hiiii");
 
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -141,12 +152,10 @@ height = 1000;
                     public void run() {
                         changePos();
                         invalidate();
-                        //changePos(canvas1);
-                      //  canvas.drawBitmap(bitmaps[2], 0, 0, null);
                     }
                 });
             }
-        }, 25, Integer.MAX_VALUE);
+        }, 20, Integer.MAX_VALUE);
 
 //        timer.schedule(new TimerTask() {
 //            public void run() {
@@ -163,14 +172,20 @@ height = 1000;
     }
 
     public void changePos(){
-
-
-
-        Log.i("hello", "moving");
+        //Log.i("changePos", " ");
         for (int i = 0; i < nBalloons; i++){
             Rect rect = destRects[i];
-            destRects[i] = new Rect(rect.left, rect.top - 5, rect.right, rect.bottom - 5);
+
+            if (rect.bottom < 0){
+                destRects[i] = new Rect(rect.left, rect.top + 2*height, rect.right, rect.bottom + 2*height);
+                // if they are on the top, we move them to the bottom. Below where the screen is
+            }
+            else {
+                destRects[i] = new Rect(rect.left, rect.top - speed, rect.right, rect.bottom - speed);
+                // move them to the top
+            }
         }
+
     //    Random rand = new Random();
     //    int a = rand.nextInt(8) + 1;
         //int left = rand.nextInt(width - balloonWidth);
