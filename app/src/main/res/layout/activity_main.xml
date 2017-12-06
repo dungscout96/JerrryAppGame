@@ -2,20 +2,23 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CoordLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.gettysburg.jerry_s_game.MainActivity">
 
     <LinearLayout
+        android:id="@+id/linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <edu.gettysburg.jerry_s_game.BalloonView
             android:id="@+id/balloonView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>

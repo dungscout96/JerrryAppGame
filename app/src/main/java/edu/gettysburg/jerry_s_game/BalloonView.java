@@ -22,6 +22,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,7 +90,6 @@ public class BalloonView extends View {
     }
 
     private void init(){
-
         isGameOver = false;
 
         // TODO get actual width and height
@@ -103,7 +103,6 @@ public class BalloonView extends View {
         // onDraw method such that when we update the width and the height (at the beginning 0)
         // we create new balloons.
         // So far it generates the balloons at the given width and height
-
 
         for (int i = 1; i < imageResIds.length; i++){
             balloonsDrawable[i] = res.getDrawable(imageResIds[i]);
@@ -237,8 +236,6 @@ public class BalloonView extends View {
                 }
             }
         }
-
-
     }
 
     // TODO make balloons clickable
@@ -254,7 +251,7 @@ public class BalloonView extends View {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!isGameOver && event.getActionMasked() == MotionEvent.ACTION_DOWN || event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+        if (!isGameOver && event.getActionMasked() == MotionEvent.ACTION_DOWN || !isGameOver && event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
             int touchX = (int)event.getX();
             int touchY = (int)event.getY();
             for (int i = 0; i < nBalloons; ++i) {
@@ -264,6 +261,10 @@ public class BalloonView extends View {
                     Log.i("onTouchEvent","points " + balloonPoints.get(i));
                     balloonTouched.put(i,0);
                     totalScore += balloonPoints.get(i);
+
+                    TextView score = findViewById(R.id.scoreIDLABEL);
+                    score.setText("Hellooooo");
+
                     Log.i("onTouchEvent","totalScore " + totalScore);
                 }
             }
