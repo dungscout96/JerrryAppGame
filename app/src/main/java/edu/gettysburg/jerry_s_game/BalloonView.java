@@ -37,7 +37,7 @@ import java.util.HashMap;
  */
 
 public class BalloonView extends View {
-    private int nBalloons = 40;
+    private int nBalloons = 2000;
     private int speed = 7;
     private int width;
     private int height;
@@ -64,6 +64,7 @@ public class BalloonView extends View {
     HashMap<Integer, Integer> balloonPoints = new HashMap<Integer, Integer>();
     int balloonHeight;
     int balloonWidth;
+    int totalLine = 0;
 
     Rect srcRect;
     Rect destRect;
@@ -116,22 +117,50 @@ public class BalloonView extends View {
         balloonWidth = (bitmaps[1].getWidth() - 1) / 3;
 
         //make n random balloons with random rectangles
-        Random rand = new Random();
-
-        for (int i = 0; i < nBalloons; i++) {
-            int a = rand.nextInt(8) + 1;
-            int left = rand.nextInt(width - balloonWidth);
-            int top = rand.nextInt(2 * height);
-
-            Rect dRect = new Rect(left, top, left + balloonWidth, top + balloonHeight);
-            destRects[i] = dRect;
-            destBalloons[i] = a; //so we can pair the color with the balloon
-
-            balloonPoints.put(i,points[a]);
-           // canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
-        }
+        generateNew(width, height);
+//        for (int i = 0; i < nBalloons; i++) {
+//            int a = rand.nextInt(8) + 1;
+//            int left = rand.nextInt(width - balloonWidth);
+//            int top = rand.nextInt(2 * height);
+//
+//            Rect dRect = new Rect(left, top, left + balloonWidth, top + balloonHeight);
+//            destRects[i] = dRect;
+//            destBalloons[i] = a; //so we can pair the color with the balloon
+//
+//            balloonPoints.put(i,points[a]);
+//            // canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
+//        }
         srcRect = new Rect(0, 0, bitmaps[1].getWidth() - 1, bitmaps[1].getHeight() - 1);
-        destRect = new Rect(0, 0, balloonWidth, balloonHeight);
+    }
+
+    private void generateNew(int width, int height) {
+        System.out.println("456789132456789456123456");
+        int total = 0;
+        int limit = nBalloons;
+        Random rand = new Random();
+        while (total < limit) {
+            int per_line = rand.nextInt(4) + 2;
+            if (total + per_line > limit) per_line = limit - total;
+            int[] colorsBall = new int[per_line];
+            int length = width - balloonWidth * per_line;
+            for (int i = 0; i < per_line; i++) {
+                int ranLeft = rand.nextInt(length);
+                if (i > 0) colorsBall[i] = ranLeft + colorsBall[i - 1] + balloonWidth * i;
+                else colorsBall[i] = ranLeft;
+                length -= ranLeft;
+            }
+            for (int i = 0; i < per_line; i++) {
+                int deviateHeight = balloonHeight * totalLine + rand.nextInt(balloonHeight * 2);
+                Rect ran = new Rect(colorsBall[i], height + deviateHeight,
+                        colorsBall[i] + balloonWidth, height + balloonHeight + deviateHeight);
+                int a = rand.nextInt(8) +1;
+                destBalloons[total + i] = a;
+                destRects[total + i] = ran;
+                balloonPoints.put(total+i,points[a]);
+            }
+            total += per_line;
+            totalLine++;
+        }
     }
 
     @Override
@@ -181,7 +210,7 @@ public class BalloonView extends View {
             Rect rect = destRects[i];
 
             if (rect.bottom < 0){
-                destRects[i] = new Rect(rect.left, rect.top + 2*height, rect.right, rect.bottom + 2*height);
+                destRects[i] = new Rect(rect.left, rect.top + totalLine * balloonHeight, rect.right, rect.bottom + totalLine * balloonHeight);
                 // reset balloon bitmap to make them appear again
                 if (balloonTouched.containsKey(i)) {
                     balloonTouched.remove(i);
@@ -215,7 +244,6 @@ public class BalloonView extends View {
     // TODO make balloons clickable
     /* make them invisible if clickable and make them visible again in changePos()
         also, set a counter for the score
-
      */
 
     /*
@@ -244,9 +272,7 @@ public class BalloonView extends View {
     }
 
     /*public void makeBalloonsClickable() {
-
         for (ImageView balloon : balloons) {
-
             balloon.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -258,7 +284,6 @@ public class BalloonView extends View {
             });
         }
     }
-
     public void balloonTouched(View view) {
         view.setVisibility(View.INVISIBLE);
     }*/
