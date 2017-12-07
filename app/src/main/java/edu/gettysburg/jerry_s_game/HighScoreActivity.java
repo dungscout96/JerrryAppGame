@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,17 +18,14 @@ public class HighScoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_score);
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putInt(getString(R.string.saved_high_score), 15);
-        editor.commit();
-
 
         try {
             FileInputStream fis = openFileInput("high_score");
-            int savedHighScore = fis.read();
+            DataInputStream in = new DataInputStream(fis);
+            int savedHighScore = in.readInt();
             Log.i("HighScore", "Current high score: " + savedHighScore);
             fis.close();
+            in.close();
             TextView score = (TextView)findViewById(R.id.scoreText);
             score.setText(""+savedHighScore);
         } catch (IOException e) {
