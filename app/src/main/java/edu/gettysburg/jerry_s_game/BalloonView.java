@@ -189,7 +189,6 @@ public class BalloonView extends View {
         width = getWidth();
         height = getHeight();
 
-
         LinearLayout layout = new LinearLayout(getContext());
         TextView missView = new TextView(getContext());
         missView.setVisibility(View.VISIBLE);
@@ -209,9 +208,6 @@ public class BalloonView extends View {
         layout.measure(canvas.getWidth(), 20);
         layout.layout(0, 0, canvas.getWidth(), 20);
         layout.setGravity(Gravity.CENTER);
-        layout.draw(canvas);
-
-
 
         canvas.drawRect(0,scoreView.getHeight(),width,height,whitePaint);
 
@@ -238,6 +234,7 @@ public class BalloonView extends View {
             }
         }, 20, Integer.MAX_VALUE);
 
+        layout.draw(canvas);
         // makeBalloonsClickable();
     }
 
@@ -351,12 +348,11 @@ public class BalloonView extends View {
             }
         }
         Toast.makeText(getContext(),"Game Over",Toast.LENGTH_SHORT).show();
-//                        Intent homepage = new Intent(getContext(), GameOverActivity.class);
         MainActivity homeActivity = (MainActivity) getContext();
         homeActivity.gameOver(totalScore);
         // get score
         // assign to highscore
-        System.exit(0);
+//        System.exit(0);
     }
     /*public void makeBalloonsClickable() {
         for (ImageView balloon : balloons) {

@@ -22,10 +22,12 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".InfoActivity" />
-        <activity android:name=".HighScoreActivity" />
-        <activity android:name=".EndActivity" />
-        <activity android:name=".GameOverActivity"></activity>
+        <activity android:name=".InfoActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".HighScoreActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".EndActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
