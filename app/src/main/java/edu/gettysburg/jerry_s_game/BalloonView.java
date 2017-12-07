@@ -361,8 +361,11 @@ public class BalloonView extends View {
             try {
                 Log.i("endGame", "write to high_score first time");
                 FileOutputStream fos = context.getApplicationContext().openFileOutput("high_score", Context.MODE_PRIVATE);
-                fos.write(totalScore);
+                DataOutputStream out = new DataOutputStream(fos);
+//                fos.write(totalScore);
+                out.writeInt(totalScore);
                 fos.close();
+                out.close();
             }
             catch (Exception e1) {
 
