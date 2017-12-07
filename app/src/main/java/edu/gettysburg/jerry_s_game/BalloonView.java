@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -260,6 +262,7 @@ public class BalloonView extends View {
                         Log.i("error", "" + error);
                         if (error >= 20) {
                             endgame();
+                            return;
                         }
                     }
                 }
@@ -331,17 +334,23 @@ public class BalloonView extends View {
         int savedHighScore = 0;
         try {
             FileInputStream fis = context.getApplicationContext().openFileInput("high_score");
-            savedHighScore = fis.read();
+            DataInputStream in = new DataInputStream(fis);
+            savedHighScore = in.readInt();
+//            savedHighScore = fis.read();
             Log.i("endGame", "Current high score: " + savedHighScore);
             fis.close();
+            in.close();
             if (savedHighScore < totalScore) {
                 try {
                     FileOutputStream fos = context.getApplicationContext().openFileOutput("high_score", Context.MODE_PRIVATE);
-                    fos.write(totalScore);
+                    DataOutputStream out = new DataOutputStream(fos);
+                    out.writeInt(totalScore);
                     fos.close();
+                    out.close();
+                    Log.i("endGame", "wrote to high_score " + totalScore);
                 }
                 catch (FileNotFoundException e) {
-                    Log.i("endGame", "write to high_score sssss");
+
                 }
             }
             else {
@@ -352,8 +361,11 @@ public class BalloonView extends View {
             try {
                 Log.i("endGame", "write to high_score first time");
                 FileOutputStream fos = context.getApplicationContext().openFileOutput("high_score", Context.MODE_PRIVATE);
-                fos.write(totalScore);
+                DataOutputStream out = new DataOutputStream(fos);
+//                fos.write(totalScore);
+                out.writeInt(totalScore);
                 fos.close();
+                out.close();
             }
             catch (Exception e1) {
 

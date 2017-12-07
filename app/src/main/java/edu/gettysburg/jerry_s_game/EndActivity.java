@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -32,10 +34,11 @@ public class EndActivity extends AppCompatActivity {
         TextView highestView = findViewById(R.id.highScore);
         try {
             FileInputStream fis = openFileInput("high_score");
-            int savedHighScore = fis.read();
-            Log.i("HighScore", "Current high score: " + savedHighScore);
+            DataInputStream in = new DataInputStream(fis);
+            int savedHighScore = in.readInt();
+            Log.i("EndActivity", "High score: " + savedHighScore);
             fis.close();
-            TextView score = (TextView)findViewById(R.id.scoreText);
+            in.close();
             highestView.setText(""+savedHighScore);
         } catch (IOException e) {
             e.printStackTrace();
