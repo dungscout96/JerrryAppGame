@@ -51,6 +51,7 @@ public class BalloonView extends View {
 
     boolean isGameOver = false;
     int totalScore = 0;
+    int error = 0;
 
     static final Paint whitePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -152,6 +153,7 @@ public class BalloonView extends View {
                 int deviateHeight = balloonHeight * totalLine + rand.nextInt(balloonHeight * 2);
                 Rect ran = new Rect(colorsBall[i], height + deviateHeight,
                         colorsBall[i] + balloonWidth, height + balloonHeight + deviateHeight);
+
                 int a = rand.nextInt(8) +1;
                 destBalloons[total + i] = a;
                 destRects[total + i] = ran;
@@ -211,10 +213,19 @@ public class BalloonView extends View {
             if (rect.bottom < 0){
                 destRects[i] = new Rect(rect.left, rect.top + totalLine * balloonHeight, rect.right, rect.bottom + totalLine * balloonHeight);
                 // reset balloon bitmap to make them appear again
-                if (balloonTouched.containsKey(i)) {
+                if (!balloonTouched.containsKey(i) && !balloonDisappeared.contains(i)) {
+                    if (destBalloons[i] != 8) {
+                        error++;
+                        Log.i("error", "" + error);
+                        if (error == 5) {
+                            endgame();
+                        }
+                    }
+                }
+               else if (balloonTouched.containsKey(i)) {
                     balloonTouched.remove(i);
                 }
-                if (balloonDisappeared.contains(i)) {
+                 else  {
                     balloonDisappeared.remove(i);
                 }
                 // if they are on the top, we move them to the bottom. Below where the screen is
@@ -263,7 +274,8 @@ public class BalloonView extends View {
                     totalScore += balloonPoints.get(i);
 
                     TextView score = findViewById(R.id.scoreIDLABEL);
-                    score.setText("Hellooooo");
+                  //  score.setText("Hellooooo");
+                    // score is null for some reason
 
                     Log.i("onTouchEvent","totalScore " + totalScore);
                 }
@@ -272,6 +284,11 @@ public class BalloonView extends View {
         return true;
     }
 
+    public void endgame(){
+        // get score
+        // assign to highscore
+        System.exit(0);
+    }
     /*public void makeBalloonsClickable() {
         for (ImageView balloon : balloons) {
             balloon.setOnTouchListener(new View.OnTouchListener() {
