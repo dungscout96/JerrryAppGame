@@ -98,6 +98,7 @@ public class BalloonView extends View {
     private void init(){
         isGameOver = false;
         // TODO get actual width and height
+
         width = 1080;
         height = 1584;
         // we need to somehow be able to fix this: init() gets called before onDraw.
@@ -161,6 +162,7 @@ public class BalloonView extends View {
                 destBalloons[total + i] = a;
                 destRects[total + i] = ran;
                 balloonPoints.put(total+i,points[a]);
+
             }
             total += per_line;
             totalLine++;
@@ -183,7 +185,6 @@ public class BalloonView extends View {
         height = getHeight();
 
         LinearLayout layout = new LinearLayout(getContext());
-
         TextView scoreView = new TextView(getContext());
         scoreView.setVisibility(View.VISIBLE);
         scoreView.setText("Your Score " + totalScore);
@@ -274,8 +275,8 @@ public class BalloonView extends View {
             for (int i = 0; i < nBalloons; ++i) {
                 Rect rect = destRects[i];
                 int balloonIndex = destBalloons[i];
-                if (rect.contains(touchX, touchY)) {
-                    balloonTouched.put(i,0);
+                if (rect.contains(touchX, touchY) && !balloonDisappeared.contains(i)){
+                    balloonTouched.put(i, 0);
                     totalScore += balloonPoints.get(i);
                 }
             }
