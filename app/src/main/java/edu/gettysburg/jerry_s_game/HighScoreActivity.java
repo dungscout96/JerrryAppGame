@@ -30,6 +30,8 @@ public class HighScoreActivity extends AppCompatActivity {
             TextView score = (TextView)findViewById(R.id.scoreText);
             score.setText(""+savedHighScore);
         } catch (IOException e) {
+            TextView score = (TextView)findViewById(R.id.scoreText);
+            score.setText("0");
             e.printStackTrace();
         }
     }

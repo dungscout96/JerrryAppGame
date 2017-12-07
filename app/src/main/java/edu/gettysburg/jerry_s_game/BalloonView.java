@@ -3,6 +3,7 @@ package edu.gettysburg.jerry_s_game;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +27,9 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -77,6 +81,7 @@ public class BalloonView extends View {
     Rect srcRect;
     //Rect destRect;
 
+    //black, purple, blue, green, yellow, orange, red
     public static final Integer[] imageResIds = new Integer[]{0, R.drawable.black,
             R.drawable.purple,R.drawable.blue,R.drawable.green, R.drawable.yellow,
             R.drawable.orange,R.drawable.red, R.drawable.death};
@@ -97,6 +102,7 @@ public class BalloonView extends View {
 
     private void init(){
         isGameOver = false;
+
         // TODO get actual width and height
         width = 1080;
         height = 1584;
@@ -138,6 +144,7 @@ public class BalloonView extends View {
     }
 
     private void generateNew(int width, int height) {
+        System.out.println("456789132456789456123456");
         int total = 0;
         int limit = nBalloons;
         Random rand = new Random();
@@ -182,19 +189,29 @@ public class BalloonView extends View {
         width = getWidth();
         height = getHeight();
 
+
         LinearLayout layout = new LinearLayout(getContext());
+        TextView missView = new TextView(getContext());
+        missView.setVisibility(View.VISIBLE);
+        missView.setText("       Misses " + error);
+        missView.setTextSize(30);
+        missView.setTextColor(Color.RED);
+        missView.setGravity(Gravity.RIGHT);
 
         TextView scoreView = new TextView(getContext());
         scoreView.setVisibility(View.VISIBLE);
         scoreView.setText("Your Score " + totalScore);
         scoreView.setTextSize(30);
         scoreView.setTextColor(Color.BLACK);
-        scoreView.setGravity(Gravity.CENTER);
+        scoreView.setGravity(Gravity.LEFT);
         layout.addView(scoreView);
+        layout.addView(missView);
         layout.measure(canvas.getWidth(), 20);
         layout.layout(0, 0, canvas.getWidth(), 20);
         layout.setGravity(Gravity.CENTER);
         layout.draw(canvas);
+
+
 
         canvas.drawRect(0,scoreView.getHeight(),width,height,whitePaint);
 
@@ -220,6 +237,8 @@ public class BalloonView extends View {
                 });
             }
         }, 20, Integer.MAX_VALUE);
+
+        // makeBalloonsClickable();
     }
 
     public void changePos(){
@@ -230,10 +249,10 @@ public class BalloonView extends View {
                 destRects[i] = new Rect(rect.left, rect.top + totalLine * balloonHeight, rect.right, rect.bottom + totalLine * balloonHeight);
                 // reset balloon bitmap to make them appear again
                 if (!balloonTouched.containsKey(i) && !balloonDisappeared.contains(i)) {
-                    if (destBalloons[i] != 8) {
+                    if (destBalloons[i] != 8 && balloonPoints.get(i) != -1) {
                         error++;
                         Log.i("error", "" + error);
-                        if (error >= 5) {
+                        if (error >= 20) {
                             endgame();
                         }
                     }
@@ -265,6 +284,16 @@ public class BalloonView extends View {
         }
     }
 
+    // TODO make balloons clickable
+    /* make them invisible if clickable and make them visible again in changePos()
+        also, set a counter for the score
+     */
+
+    /*
+     // TODO set a timer
+    We have to be able to lose somehow, right? And if we lose, save the High Score
+     */
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -275,8 +304,15 @@ public class BalloonView extends View {
                 Rect rect = destRects[i];
                 int balloonIndex = destBalloons[i];
                 if (rect.contains(touchX, touchY)) {
+                    Log.i("onTouchEvent","points " + balloonPoints.get(i));
                     balloonTouched.put(i,0);
                     totalScore += balloonPoints.get(i);
+
+                    if (balloonPoints.get(i) == -1){
+                        endgame();
+                    }
+
+                    Log.i("onTouchEvent","totalScore " + totalScore);
                 }
             }
         }
@@ -313,8 +349,28 @@ public class BalloonView extends View {
 
             }
         }
+        Toast.makeText(getContext(),"Game Over",Toast.LENGTH_SHORT).show();
+//                        Intent homepage = new Intent(getContext(), GameOverActivity.class);
+        MainActivity homeActivity = (MainActivity) getContext();
+        homeActivity.gameOver(totalScore);
         // get score
         // assign to highscore
         System.exit(0);
     }
+    /*public void makeBalloonsClickable() {
+        for (ImageView balloon : balloons) {
+            balloon.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    Log.i("touched", "balloon touched");
+                    //     balloon.setVisibility(View.INVISIBLE);
+                    balloonTouched(view);
+                    return false;
+                }
+            });
+        }
+    }
+    public void balloonTouched(View view) {
+        view.setVisibility(View.INVISIBLE);
+    }*/
 }

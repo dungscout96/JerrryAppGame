@@ -43,6 +43,19 @@ public class HomeScreenActivity extends AppCompatActivity {
             }
         });
 
-
     }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+//        mHelloCount = savedInstanceState.getInt("mHelloCount");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        outState.putInt("mHelloCount", mHelloCount);
+    }
+
+
 }
