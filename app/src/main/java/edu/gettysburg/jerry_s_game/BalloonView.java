@@ -2,6 +2,7 @@ package edu.gettysburg.jerry_s_game;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +27,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -229,7 +233,7 @@ public class BalloonView extends View {
                     if (destBalloons[i] != 8) {
                         error++;
                         Log.i("error", "" + error);
-                        if (error == 5) {
+                        if (error >= 5) {
                             endgame();
                         }
                     }
@@ -280,6 +284,35 @@ public class BalloonView extends View {
     }
 
     public void endgame(){
+        Context context = getContext();
+        int savedHighScore = 0;
+        try {
+            FileInputStream fis = context.getApplicationContext().openFileInput("high_score");
+            savedHighScore = fis.read();
+            Log.i("endGame", "Current high score: " + savedHighScore);
+            fis.close();
+            if (savedHighScore < totalScore) {
+                try {
+                    FileOutputStream fos = context.getApplicationContext().openFileOutput("high_score", Context.MODE_PRIVATE);
+                    fos.write(totalScore);
+                    fos.close();
+                }
+                catch (FileNotFoundException e) {
+                    Log.i("endGame", "write to high_score sssss");
+                }
+            }
+        }
+        catch (Exception e) {
+            try {
+                Log.i("endGame", "write to high_score first time");
+                FileOutputStream fos = context.getApplicationContext().openFileOutput("high_score", Context.MODE_PRIVATE);
+                fos.write(totalScore);
+                fos.close();
+            }
+            catch (Exception e1) {
+
+            }
+        }
         // get score
         // assign to highscore
         System.exit(0);
