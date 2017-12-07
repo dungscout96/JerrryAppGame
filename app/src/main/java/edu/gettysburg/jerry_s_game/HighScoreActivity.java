@@ -22,6 +22,7 @@ public class HighScoreActivity extends AppCompatActivity {
 //        editor.putInt(getString(R.string.saved_high_score), 15);
         editor.commit();
 
+
         try {
             FileInputStream fis = openFileInput("high_score");
             int savedHighScore = fis.read();

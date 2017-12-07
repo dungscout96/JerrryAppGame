@@ -267,6 +267,7 @@ public class BalloonView extends View {
 
                 // TODO update visibility here to make them visible again
             }
+
             else {
                 destRects[i] = new Rect(rect.left, rect.top - speed, rect.right, rect.bottom - speed); // move them to the top
                 // for animation: update balloons' bitmaps
