@@ -310,7 +310,7 @@ public class BalloonView extends View {
             for (int i = 0; i < nBalloons; ++i) {
                 Rect rect = destRects[i];
                 int balloonIndex = destBalloons[i];
-                if (rect.contains(touchX, touchY)) {
+                if (rect.contains(touchX, touchY) && !balloonDisappeared.contains(i)){
                     Log.i("onTouchEvent","points " + balloonPoints.get(i));
                     balloonTouched.put(i,0);
                     totalScore += balloonPoints.get(i);
