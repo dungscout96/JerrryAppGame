@@ -50,8 +50,8 @@ import java.util.HashMap;
  */
 
 public class BalloonView extends View {
-    private int nBalloons = 2000;
-    private int speed = 7;
+    private int nBalloons = 1000;
+    private int speed = 25;
     private int width;
     private int height;
     Canvas canvas1;
@@ -154,13 +154,23 @@ public class BalloonView extends View {
             int per_line = rand.nextInt(4) + 2;
             if (total + per_line > limit) per_line = limit - total;
             int[] colorsBall = new int[per_line];
-            int length = width - balloonWidth * per_line;
+
+            int length = width / per_line;
+            int maxWidth = length - balloonWidth;
             for (int i = 0; i < per_line; i++) {
-                int ranLeft = rand.nextInt(length);
-                if (i > 0) colorsBall[i] = ranLeft + colorsBall[i - 1] + balloonWidth * i;
-                else colorsBall[i] = ranLeft;
-                length -= ranLeft;
+                int ranLeft = rand.nextInt(maxWidth);
+                colorsBall[i] = ranLeft + length * i;
+
             }
+
+
+            //int length = width - balloonWidth * per_line;
+//            for (int i = 0; i < per_line; i++) {
+//                int ranLeft = rand.nextInt(length);
+//                if (i > 0) colorsBall[i] = ranLeft + colorsBall[i - 1] + balloonWidth * i;
+//                else colorsBall[i] = ranLeft;
+//                length -= ranLeft;
+//            }
             for (int i = 0; i < per_line; i++) {
                 int deviateHeight = balloonHeight * totalLine + rand.nextInt(balloonHeight * 2);
                 Rect ran = new Rect(colorsBall[i], height + deviateHeight,
@@ -173,6 +183,7 @@ public class BalloonView extends View {
             }
             total += per_line;
             totalLine++;
+            
         }
     }
 
@@ -188,8 +199,6 @@ public class BalloonView extends View {
 //          Maybe we don't need it
 //          Maybe fix here the problem with the width and the height / rotation of the screen?
 //        }
-        width = getWidth();
-        height = getHeight();
 
         LinearLayout layout = new LinearLayout(getContext());
         TextView missView = new TextView(getContext());
@@ -343,6 +352,9 @@ public class BalloonView extends View {
                 catch (FileNotFoundException e) {
 
                 }
+            }
+            else {
+                Log.i("endGame", "Should have updated");
             }
         }
         catch (Exception e) {
