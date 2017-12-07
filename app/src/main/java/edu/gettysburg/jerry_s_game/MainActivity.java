@@ -27,15 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void init()
     {
-        CoordinatorLayout layout = findViewById(R.id.CoordLayout);
-        TextView scoreLabel = new TextView(this);
-        scoreLabel.setText("Score: 0");
 
-        scoreLabel.setId(R.id.scoreIDLABEL);
-        scoreLabel.setTextSize(20);
-        layout.addView(scoreLabel);
-
-        final TextView timerTextView = new TextView(this);
+//        final TextView timerTextView = new TextView(this);
         //timer(30000, timerTextView);
         //layout.addView(timerTextView);
     }

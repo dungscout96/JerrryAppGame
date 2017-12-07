@@ -16,12 +16,14 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -179,7 +181,23 @@ public class BalloonView extends View {
         width = getWidth();
         height = getHeight();
 
-        canvas.drawRect(0,0,width,height,whitePaint);
+
+        LinearLayout layout = new LinearLayout(getContext());
+
+        TextView scoreView = new TextView(getContext());
+        scoreView.setVisibility(View.VISIBLE);
+        scoreView.setText("Your Score " + totalScore);
+        scoreView.setTextSize(30);
+        scoreView.setTextColor(Color.BLACK);
+        scoreView.setGravity(Gravity.CENTER);
+        layout.addView(scoreView);
+        layout.measure(canvas.getWidth(), 20);
+        layout.layout(0, 0, canvas.getWidth(), 20);
+        layout.setGravity(Gravity.CENTER);
+        layout.draw(canvas);
+
+        canvas.drawRect(0,scoreView.getHeight(),width,height,whitePaint);
+
         for (int i = 0; i < nBalloons; i++) {
             if (balloonTouched.containsKey(i) || balloonDisappeared.contains(i)) {
                 if (balloonTouched.containsKey(i)) {
