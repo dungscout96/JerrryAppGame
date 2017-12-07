@@ -49,7 +49,7 @@ import java.util.HashMap;
 
 public class BalloonView extends View {
     private int nBalloons = 1000;
-    private int speed = 25;
+    private int speed = 10;
     private int width;
     private int height;
     Canvas canvas1;
@@ -181,7 +181,7 @@ public class BalloonView extends View {
             }
             total += per_line;
             totalLine++;
-            
+
         }
     }
 
