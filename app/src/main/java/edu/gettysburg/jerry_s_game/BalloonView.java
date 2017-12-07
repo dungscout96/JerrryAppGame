@@ -71,9 +71,8 @@ public class BalloonView extends View {
     int totalLine = 0;
 
     Rect srcRect;
-    Rect destRect;
+    //Rect destRect;
 
-    //black, purple, blue, green, yellow, orange, red
     public static final Integer[] imageResIds = new Integer[]{0, R.drawable.black,
             R.drawable.purple,R.drawable.blue,R.drawable.green, R.drawable.yellow,
             R.drawable.orange,R.drawable.red, R.drawable.death};
@@ -94,7 +93,6 @@ public class BalloonView extends View {
 
     private void init(){
         isGameOver = false;
-
         // TODO get actual width and height
         width = 1080;
         height = 1584;
@@ -136,7 +134,6 @@ public class BalloonView extends View {
     }
 
     private void generateNew(int width, int height) {
-        System.out.println("456789132456789456123456");
         int total = 0;
         int limit = nBalloons;
         Random rand = new Random();
@@ -181,7 +178,6 @@ public class BalloonView extends View {
         width = getWidth();
         height = getHeight();
 
-
         LinearLayout layout = new LinearLayout(getContext());
 
         TextView scoreView = new TextView(getContext());
@@ -220,8 +216,6 @@ public class BalloonView extends View {
                 });
             }
         }, 20, Integer.MAX_VALUE);
-
-        // makeBalloonsClickable();
     }
 
     public void changePos(){
@@ -267,16 +261,6 @@ public class BalloonView extends View {
         }
     }
 
-    // TODO make balloons clickable
-    /* make them invisible if clickable and make them visible again in changePos()
-        also, set a counter for the score
-     */
-
-    /*
-     // TODO set a timer
-    We have to be able to lose somehow, right? And if we lose, save the High Score
-     */
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -287,15 +271,8 @@ public class BalloonView extends View {
                 Rect rect = destRects[i];
                 int balloonIndex = destBalloons[i];
                 if (rect.contains(touchX, touchY)) {
-                    Log.i("onTouchEvent","points " + balloonPoints.get(i));
                     balloonTouched.put(i,0);
                     totalScore += balloonPoints.get(i);
-
-                    TextView score = findViewById(R.id.scoreIDLABEL);
-                  //  score.setText("Hellooooo");
-                    // score is null for some reason
-
-                    Log.i("onTouchEvent","totalScore " + totalScore);
                 }
             }
         }
@@ -307,20 +284,4 @@ public class BalloonView extends View {
         // assign to highscore
         System.exit(0);
     }
-    /*public void makeBalloonsClickable() {
-        for (ImageView balloon : balloons) {
-            balloon.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    Log.i("touched", "balloon touched");
-                    //     balloon.setVisibility(View.INVISIBLE);
-                    balloonTouched(view);
-                    return false;
-                }
-            });
-        }
-    }
-    public void balloonTouched(View view) {
-        view.setVisibility(View.INVISIBLE);
-    }*/
 }
