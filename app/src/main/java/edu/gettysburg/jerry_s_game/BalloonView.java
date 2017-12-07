@@ -181,6 +181,7 @@ public class BalloonView extends View {
             }
             total += per_line;
             totalLine++;
+            
         }
     }
 
