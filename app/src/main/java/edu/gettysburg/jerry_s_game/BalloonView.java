@@ -51,7 +51,7 @@ import java.util.HashMap;
 
 public class BalloonView extends View {
     private int nBalloons = 1000;
-    private int speed = 10;
+    private int speed = 7;
     private int width;
     private int height;
     Canvas canvas1;
@@ -130,23 +130,12 @@ public class BalloonView extends View {
 
         //make n random balloons with random rectangles
         generateNew(width, height);
-//        for (int i = 0; i < nBalloons; i++) {
-//            int a = rand.nextInt(8) + 1;
-//            int left = rand.nextInt(width - balloonWidth);
-//            int top = rand.nextInt(2 * height);
-//
-//            Rect dRect = new Rect(left, top, left + balloonWidth, top + balloonHeight);
-//            destRects[i] = dRect;
-//            destBalloons[i] = a; //so we can pair the color with the balloon
-//
-//            balloonPoints.put(i,points[a]);
-//            // canvas1.drawBitmap(bitmaps[a], srcRect, dRect, paint);
-//        }
+
         srcRect = new Rect(0, 0, bitmaps[1].getWidth() - 1, bitmaps[1].getHeight() - 1);
     }
 
     private void generateNew(int width, int height) {
-        System.out.println("456789132456789456123456");
+    //    System.out.println("456789132456789456123456");
         int total = 0;
         int limit = nBalloons;
         Random rand = new Random();
@@ -164,13 +153,6 @@ public class BalloonView extends View {
             }
 
 
-            //int length = width - balloonWidth * per_line;
-//            for (int i = 0; i < per_line; i++) {
-//                int ranLeft = rand.nextInt(length);
-//                if (i > 0) colorsBall[i] = ranLeft + colorsBall[i - 1] + balloonWidth * i;
-//                else colorsBall[i] = ranLeft;
-//                length -= ranLeft;
-//            }
             for (int i = 0; i < per_line; i++) {
                 int deviateHeight = balloonHeight * totalLine + rand.nextInt(balloonHeight * 2);
                 Rect ran = new Rect(colorsBall[i], height + deviateHeight,
@@ -192,13 +174,6 @@ public class BalloonView extends View {
         super.onDraw(canvas);
 
         canvas1 = canvas;
-
-//        if(getWidth() != width || getHeight() != height){
-//            width = getWidth();
-//            height = getHeight();
-//          Maybe we don't need it
-//          Maybe fix here the problem with the width and the height / rotation of the screen?
-//        }
 
         LinearLayout layout = new LinearLayout(getContext());
         TextView missView = new TextView(getContext());
@@ -243,7 +218,7 @@ public class BalloonView extends View {
                     }
                 });
             }
-        }, 20, Integer.MAX_VALUE);
+        }, 5, Integer.MAX_VALUE);
 
         layout.draw(canvas);
         // makeBalloonsClickable();
@@ -376,22 +351,6 @@ public class BalloonView extends View {
         homeActivity.gameOver(totalScore);
         // get score
         // assign to highscore
-//        System.exit(0);
     }
-    /*public void makeBalloonsClickable() {
-        for (ImageView balloon : balloons) {
-            balloon.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    Log.i("touched", "balloon touched");
-                    //     balloon.setVisibility(View.INVISIBLE);
-                    balloonTouched(view);
-                    return false;
-                }
-            });
-        }
-    }
-    public void balloonTouched(View view) {
-        view.setVisibility(View.INVISIBLE);
-    }*/
+
 }
