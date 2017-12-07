@@ -158,7 +158,7 @@ public class BalloonView extends View {
             for (int i = 0; i < per_line; i++) {
                 int ranLeft = rand.nextInt(maxWidth);
                 colorsBall[i] = ranLeft + length * i;
-                
+
             }
 
 
